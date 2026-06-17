@@ -7,7 +7,7 @@ on:
     branches: [main, master]
 
 jobs:
-  test:
+  core:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -33,3 +33,90 @@ jobs:
 
       - name: Test
         run: pytest --cov=slate --cov-report=term-missing
+
+  cloud-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cloud/backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check app tests
+
+      - name: Type check
+        run: mypy app
+
+      - name: Test
+        run: pytest -q
+
+  cloud-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cloud/frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: cloud/frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Check public copy
+        run: npm run check:content
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+  slate-pro-compat:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: compat/slate-pro
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install core
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ../..
+
+      - name: Install compat
+        run: pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check src tests
+
+      - name: Type check
+        run: mypy src
+
+      - name: Test
+        run: pytest -q

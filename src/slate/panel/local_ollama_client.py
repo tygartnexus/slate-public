@@ -50,6 +50,7 @@ class LocalOllamaVisionClient:
             "model": self.model,
             "prompt": prompt,
             "images": images,
+            "format": "json",
             "stream": False,
             "options": {
                 "num_predict": 2000,

@@ -63,6 +63,7 @@ def test_gemma_happy_path(monkeypatch: pytest.MonkeyPatch, tiny_png: Path) -> No
     assert captured["json"]["model"] == "gemma4:latest"
     assert isinstance(captured["json"]["images"], list)
     assert len(captured["json"]["images"]) == 1
+    assert captured["json"]["format"] == "json"
     assert captured["json"]["options"]["num_predict"] == 2048
 
 

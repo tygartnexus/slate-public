@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
 import { listVerdicts } from "@/lib/api";
 import { VerdictCard } from "@/components/verdict-card";
+import { getDashboardAuth } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const { getToken } = await auth();
-  const token = await getToken();
+  const { token } = await getDashboardAuth();
   const verdicts = token ? await listVerdicts(token) : [];
 
   return (

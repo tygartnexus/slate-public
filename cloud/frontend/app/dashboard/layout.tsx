@@ -1,10 +1,10 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
+import { getDashboardAuth } from "@/lib/auth";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = await auth();
+  const { userId, isE2EBypass } = await getDashboardAuth();
   if (!userId) redirect("/");
 
   return (
@@ -30,7 +30,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
             Access
           </Link>
         </div>
-        <UserButton />
+        {isE2EBypass ? (
+          <div className="text-sm text-zinc-500">E2E</div>
+        ) : (
+          <UserButton />
+        )}
       </nav>
       <main className="px-6 py-8 max-w-6xl mx-auto">{children}</main>
     </div>

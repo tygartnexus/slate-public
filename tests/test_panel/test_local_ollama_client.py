@@ -57,6 +57,7 @@ def test_local_ollama_client_posts_prompt_and_images(
     assert captured["json"]["model"] == "gemma4:latest"
     assert captured["json"]["prompt"] == "judge this"
     assert captured["json"]["images"]
+    assert captured["json"]["format"] == "json"
     assert captured["json"]["stream"] is False
     assert captured["headers"] == {"Content-Type": "application/json"}
     assert captured["timeout"] == 17

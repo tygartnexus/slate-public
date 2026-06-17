@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { isE2EAuthBypassEnabled } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Slate — don't ship broken AI animation",
@@ -9,11 +10,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const body = (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+
+  if (isE2EAuthBypassEnabled()) {
+    return body;
+  }
+
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
+      {body}
     </ClerkProvider>
   );
 }

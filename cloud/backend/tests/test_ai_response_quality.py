@@ -69,6 +69,17 @@ def test_valid_report_with_missing_evidence_acknowledgement_passes() -> None:
     assert validated.evidence == ["No direct evidence was provided in the upload."]
 
 
+def test_scalar_list_sections_are_normalized() -> None:
+    report = valid_report()
+    report["what_would_change_recommendation"] = "A human review finding a blocker."
+
+    validated = validate_response_quality_report(report)
+
+    assert validated.what_would_change_recommendation == [
+        "A human review finding a blocker."
+    ]
+
+
 def test_missing_evidence_is_rejected() -> None:
     report = valid_report()
     report["evidence"] = []

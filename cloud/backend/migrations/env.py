@@ -9,7 +9,7 @@ from sqlalchemy import engine_from_config, pool
 
 from app.config import get_settings
 from app.db import Base
-from app.models import Account, License, VerdictRecord  # noqa: F401 — ensure metadata registered
+from app.models import Account, VerdictRecord  # noqa: F401 — ensure metadata registered
 
 config = context.config
 if config.config_file_name is not None:

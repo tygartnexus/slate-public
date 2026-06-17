@@ -53,6 +53,7 @@ class GemmaProvider:
             "model": self.model,
             "prompt": build_frame_analysis_prompt(manifest),
             "images": [b64],
+            "format": "json",
             "stream": False,
             "options": {
                 "num_predict": _num_predict(),

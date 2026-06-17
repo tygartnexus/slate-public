@@ -128,6 +128,23 @@ class ResponseQualityReport(BaseModel):
         "counterarguments",
         "tradeoffs",
         "what_would_change_recommendation",
+        mode="before",
+    )
+    @classmethod
+    def _coerce_scalar_list_items(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            return [value]
+        return value
+
+    @field_validator(
+        "facts",
+        "assumptions",
+        "unknowns",
+        "evidence",
+        "risks",
+        "counterarguments",
+        "tradeoffs",
+        "what_would_change_recommendation",
     )
     @classmethod
     def _list_items_must_be_substantive(cls, values: list[str]) -> list[str]:

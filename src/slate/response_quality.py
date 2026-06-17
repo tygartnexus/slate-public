@@ -146,9 +146,20 @@ def parse_response_quality_report(raw: Mapping[str, Any]) -> ResponseQualityRepo
     if not isinstance(candidate, Mapping):
         return None
     try:
-        return ResponseQualityReport.model_validate(candidate)
+        return ResponseQualityReport.model_validate(_normalize_list_sections(candidate))
     except ValidationError:
         return None
+
+
+def _normalize_list_sections(raw: Mapping[str, Any]) -> dict[str, Any]:
+    normalized = dict(raw)
+    for key in REQUIRED_SECTION_KEYS:
+        if key in {"confidence_score", "recommendation"}:
+            continue
+        value = normalized.get(key)
+        if isinstance(value, str):
+            normalized[key] = [value]
+    return normalized
 
 
 def missing_evidence_report(

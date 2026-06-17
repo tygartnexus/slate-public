@@ -13,6 +13,7 @@ from slate.response_quality import (
     build_response_quality_prompt,
     missing_evidence_report,
     missing_required_sections,
+    parse_response_quality_report,
 )
 
 
@@ -67,6 +68,31 @@ def test_missing_evidence_report_acknowledges_gap() -> None:
     assert report.evidence == []
     assert "Evidence is missing." in report.unknowns
     assert report.tradeoffs
+
+
+def test_parse_response_quality_normalizes_scalar_list_sections() -> None:
+    parsed = parse_response_quality_report(
+        {
+            "response_quality": {
+                "facts": "The frame was analyzed.",
+                "assumptions": "The manifest is accurate.",
+                "unknowns": "No human review was attached.",
+                "confidence_score": 0.72,
+                "evidence": "frame_0000.png was sampled.",
+                "risks": "Unsampled frames may differ.",
+                "counterarguments": "The sampled frame may still be representative.",
+                "recommendation": "Proceed only after review.",
+                "tradeoffs": "More evidence costs more runtime.",
+                "what_would_change_recommendation": "A human review finding a blocker.",
+            }
+        }
+    )
+
+    assert parsed is not None
+    assert parsed.facts == ["The frame was analyzed."]
+    assert parsed.what_would_change_recommendation == [
+        "A human review finding a blocker."
+    ]
 
 
 def test_all_modes_emit_required_response_quality_shape() -> None:

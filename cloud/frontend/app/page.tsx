@@ -1,25 +1,34 @@
 import Link from "next/link";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { isE2EAuthBypassEnabled } from "@/lib/auth";
 
 const SLATE_REPO_URL = process.env.NEXT_PUBLIC_SLATE_REPO_URL ?? "#";
 
 export default function Home() {
+  const isE2E = isE2EAuthBypassEnabled();
+
   return (
     <main className="min-h-screen px-6 py-16 max-w-5xl mx-auto">
       <header className="flex items-center justify-between mb-20">
         <div className="font-mono text-xl tracking-tight">slate</div>
         <div className="flex items-center gap-4">
-          <Show when="signed-out">
-            <SignInButton>
-              <button className="px-4 py-2 rounded bg-slate-accent text-slate-bg font-medium">
-                Sign in
-              </button>
-            </SignInButton>
-          </Show>
-          <Show when="signed-in">
+          {isE2E ? (
             <Link href="/dashboard">Dashboard</Link>
-            <UserButton />
-          </Show>
+          ) : (
+            <>
+              <Show when="signed-out">
+                <SignInButton>
+                  <button className="px-4 py-2 rounded bg-slate-accent text-slate-bg font-medium">
+                    Sign in
+                  </button>
+                </SignInButton>
+              </Show>
+              <Show when="signed-in">
+                <Link href="/dashboard">Dashboard</Link>
+                <UserButton />
+              </Show>
+            </>
+          )}
         </div>
       </header>
 

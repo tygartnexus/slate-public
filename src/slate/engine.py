@@ -222,6 +222,9 @@ def verify(
             if not result.ok:
                 saw_provider_error = True
             response_quality = parse_response_quality_report(result.signals)
+            raw_signals = dict(result.signals)
+            if response_quality is not None:
+                raw_signals["response_quality"] = response_quality.model_dump()
             if result.ok and response_quality is None:
                 saw_response_quality_error = True
                 failures.append(
@@ -249,7 +252,7 @@ def verify(
                     frame=frame_path.name,
                     provider=result.provider,
                     model=result.model,
-                    raw_signals=result.signals,
+                    raw_signals=raw_signals,
                     quality_scores=qscores,
                     response_quality=response_quality,
                     error=result.error,
