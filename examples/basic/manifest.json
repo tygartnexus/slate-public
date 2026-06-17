@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "shot_id": "village_walk_001",
+  "description": "medieval villager walks past a cobblestone bridge",
+  "expected_characters": [
+    {
+      "id": "hero",
+      "description": "medieval female peasant in linen tunic and head scarf",
+      "must_be_visible": true,
+      "must_be_upright": true,
+      "must_have_ground_contact": true,
+      "must_have_wardrobe": true,
+      "must_have_hair_or_head_covering": true,
+      "must_match_identity": true
+    }
+  ],
+  "expected_landmarks": [
+    "medieval village",
+    "cobblestone path"
+  ],
+  "quality_thresholds": {
+    "lighting": 3,
+    "composition": 3,
+    "atmosphere": 3,
+    "mood_readability": 3,
+    "visual_coherence": 3
+  },
+  "frame_sampling": {
+    "mode": "first_mid_last"
+  },
+  "frame_count_expected": 720
+}

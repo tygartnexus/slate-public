@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Lint
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Local config
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# Local DB
+*.db
+postgres-data/
+
+# Slate runtime artefacts (verdicts, evidence bundles)
+*.verdict.json
+*_evidence_bundle/
+slate_run_*/
+
+# Frames — never commit binary render output
+*.png
+*.jpg
+*.jpeg
+*.exr
+*.tiff
+*.bmp
+
+# Exception: fixture frames ARE committed (small known-bad/known-good samples)
+!tests/fixtures/**/*.png
+!tests/fixtures/**/*.jpg

@@ -1,0 +1,74 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "slate-pro"
+version = "0.1.0"
+description = "Deprecated compatibility wrapper for Slate. Use slate-ai and the slate CLI."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Slate contributors" }]
+keywords = ["ai", "animation", "vlm", "validation", "panel", "slate", "compatibility"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "slate-ai>=0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+[project.urls]
+Homepage = "https://github.com/tygartnexus/slate-public"
+Documentation = "https://github.com/tygartnexus/slate-public#readme"
+Issues = "https://github.com/tygartnexus/slate-public/issues"
+
+[project.scripts]
+slate-pro = "slate_pro.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/slate_pro"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+
+[tool.coverage.run]
+source = ["slate_pro"]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "^\\s*\\.\\.\\.\\s*$",
+]

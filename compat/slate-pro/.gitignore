@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+*.egg-info/
+
+# Virtual envs
+.venv/
+venv/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Local config / secrets
+.env
+.env.local
+
+# License private key (NEVER commit)
+license_private_key.pem
+*_private_key.pem
+
+# Test fixtures
+*.png
+*.jpg
+*.tar.gz
+!tests/fixtures/**/*.png
