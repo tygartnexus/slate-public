@@ -1,0 +1,99 @@
+name: live-provider-certification
+
+on:
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: Provider lane to certify
+        required: true
+        default: nvidia
+        type: choice
+        options:
+          - nvidia
+          - anthropic-panel
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Create fixture
+        run: python scripts/make_certification_fixture.py --output .cert/live
+
+      - name: Check required secrets
+        env:
+          LANE: ${{ inputs.lane }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ "$LANE" = "nvidia" ] && [ -z "$NVIDIA_API_KEY" ]; then
+            echo "NVIDIA_API_KEY secret is required"
+            exit 1
+          fi
+          if [ "$LANE" = "anthropic-panel" ] && { [ -z "$NVIDIA_API_KEY" ] || [ -z "$ANTHROPIC_API_KEY" ]; }; then
+            echo "NVIDIA_API_KEY and ANTHROPIC_API_KEY secrets are required"
+            exit 1
+          fi
+
+      - name: Run live certification
+        env:
+          LANE: ${{ inputs.lane }}
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set +e
+          if [ "$LANE" = "anthropic-panel" ]; then
+            slate verify \
+              --frames .cert/live/frames \
+              --manifest .cert/live/manifest.json \
+              --provider nvidia \
+              --panel \
+              --panel-provider anthropic \
+              --output .cert/live/verdict.json \
+              --bundle .cert/live/evidence.tar.gz \
+              --redact-raw-outputs
+          else
+            slate verify \
+              --frames .cert/live/frames \
+              --manifest .cert/live/manifest.json \
+              --provider nvidia \
+              --output .cert/live/verdict.json \
+              --bundle .cert/live/evidence.tar.gz \
+              --redact-raw-outputs
+          fi
+          echo "$?" > .cert/live/exit-code.txt
+          exit 0
+
+      - name: Validate certification verdict
+        env:
+          LANE: ${{ inputs.lane }}
+        run: |
+          if [ "$LANE" = "anthropic-panel" ]; then
+            python scripts/assert_certification_verdict.py \
+              --verdict .cert/live/verdict.json \
+              --require-provider-prefix nvidia \
+              --require-panel
+          else
+            python scripts/assert_certification_verdict.py \
+              --verdict .cert/live/verdict.json \
+              --require-provider-prefix nvidia
+          fi
+
+      - name: Upload certification artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-provider-certification-${{ inputs.lane }}
+          path: .cert/live/
+          retention-days: 14

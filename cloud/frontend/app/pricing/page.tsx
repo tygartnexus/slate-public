@@ -11,7 +11,7 @@ const CAPABILITIES = [
   {
     name: "Panel review",
     description:
-      "Four-persona adversarial review with local or Anthropic panel providers.",
+      "Four-persona adversarial review with local or Anthropic panel providers after those providers are configured.",
   },
   {
     name: "Evidence bundles",

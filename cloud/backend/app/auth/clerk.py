@@ -14,6 +14,7 @@ from typing import Any
 
 import jwt as pyjwt
 from fastapi import Depends, Header, HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
@@ -61,6 +62,16 @@ def current_account(
     if account is None:
         account = Account(clerk_user_id=clerk_user_id, email=email)
         db.add(account)
-        db.commit()
-        db.refresh(account)
+        try:
+            db.commit()
+            db.refresh(account)
+        except IntegrityError:
+            db.rollback()
+            account = (
+                db.query(Account)
+                .filter(Account.clerk_user_id == clerk_user_id)
+                .one_or_none()
+            )
+            if account is None:
+                raise
     return account

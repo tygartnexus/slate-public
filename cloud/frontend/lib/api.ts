@@ -1,6 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
-interface VerdictSummary {
+export interface VerdictSummary {
   id: string;
   shot_id: string;
   final_status: string;
@@ -8,7 +8,7 @@ interface VerdictSummary {
   submitted_at: string;
 }
 
-interface VerdictDetail extends VerdictSummary {
+export interface VerdictDetail extends VerdictSummary {
   payload: Record<string, unknown>;
 }
 

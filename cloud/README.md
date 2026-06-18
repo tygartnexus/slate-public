@@ -1,7 +1,7 @@
 # Slate Cloud
 
 The free web dashboard for Slate verdicts. Users upload verdict JSON produced by
-`slate`, view history, and compare runs side-by-side.
+`slate`, view history, inspect detail pages, and compare saved runs side-by-side.
 
 This repo is MIT-licensed. There is no checkout, billing portal, paid upgrade,
 or license activation requirement.
@@ -10,7 +10,7 @@ or license activation requirement.
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│ Frontend (Next.js 14 + Tailwind, deployed on Vercel) │
+│ Frontend (Next.js 16 + Tailwind, Vercel-ready)       │
 │  - Clerk auth                                        │
 │  - Verdict list / detail / compare                   │
 │  - Free access status                                │
@@ -18,7 +18,7 @@ or license activation requirement.
                           │
                           ▼  REST + Clerk JWT
 ┌──────────────────────────────────────────────────────┐
-│ Backend (FastAPI, deployed on Fly.io / Railway)      │
+│ Backend (FastAPI, Fly.io / Railway-ready)            │
 │  - /verdicts {POST list, GET id}                     │
 │  - /accounts                                         │
 │  - /ready                                            │

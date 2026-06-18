@@ -41,7 +41,7 @@ Slate ships with local and cloud VLM provider drivers. You configure the lanes y
    - Primary: `nvidia/nemotron-nano-12b-v2-vl`
    - Cross-check: `meta/llama-3.2-90b-vision-instruct`
 
-You pay NVIDIA directly. Slate never sees your key or your frames.
+You pay NVIDIA directly. The CLI reads `NVIDIA_API_KEY` from your environment and sends sampled frames directly to NVIDIA; do not upload provider keys to Slate Cloud.
 
 ## Verifying the install
 
